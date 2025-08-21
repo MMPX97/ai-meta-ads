@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Audience Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { padding: 10px 20px; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>AI Audience Generator</h1>
+
+    <input type="text" id="businessName" placeholder="Business Name">
+    <input type="text" id="product" placeholder="Product or Service">
+    <textarea id="goal" placeholder="Goal for Ads"></textarea>
+    <button onclick="generateAudience()">Generate Audience</button>
+
+    <h2>Audience Profile:</h2>
+    <pre id="result"></pre>
+
+    <script>
+        async function generateAudience() {
+            const businessName = document.getElementById('businessName').value;
+            const product = document.getElementById('product').value;
+            const goal = document.getElementById('goal').value;
+
+            const response = await fetch('/audience/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ businessName, product, goal })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = data.audienceProfile || JSON.stringify(data);
+        }
+    </script>
+</body>
+</html>
