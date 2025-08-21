@@ -21,20 +21,28 @@
     <pre id="result"></pre>
 
     <script>
-        async function generateAudience() {
-            const businessName = document.getElementById('businessName').value;
-            const product = document.getElementById('product').value;
-            const goal = document.getElementById('goal').value;
+async function generateAudience() {
+    const businessName = document.getElementById('businessName').value;
+    const product = document.getElementById('product').value;
+    const goal = document.getElementById('goal').value;
 
-            const response = await fetch('/audience/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ businessName, product, goal })
-            });
+    const result = document.getElementById('result');
+    result.innerText = "Loading..."; // Show loading
 
-            const data = await response.json();
-            document.getElementById('result').innerText = data.audienceProfile || JSON.stringify(data);
-        }
-    </script>
+    try {
+        const response = await fetch('/audience/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ businessName, product, goal })
+        });
+
+        const data = await response.json();
+        result.innerText = data.audienceProfile || JSON.stringify(data);
+    } catch (err) {
+        result.innerText = "❌ Error generating audience. Try again.";
+        console.error(err);
+    }
+}
+</script>
 </body>
 </html>
